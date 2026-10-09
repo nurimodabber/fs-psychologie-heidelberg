@@ -8,11 +8,13 @@ import {
   MapPin, 
   Clock, 
   CalendarPlus,
-  ArrowRight
+  ArrowRight,
+  Sparkle
 } from '@phosphor-icons/react';
 
 export const LifeAtInstitute: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'partys' | 'kultur' | 'community'>('all');
+  const [activePhoto, setActivePhoto] = useState<'courtyard' | 'facade'>('courtyard');
 
   const events = [
     {
@@ -24,6 +26,13 @@ export const LifeAtInstitute: React.FC = () => {
       desc: 'Das legendäre Hüttenwochenende zum Kennenlernen! Spiele, Wanderungen, Lagerfeuer und Insider-Tipps fürs Psychologiestudium.',
       badge: 'Highlights',
       icon: UsersThree,
+      icsData: {
+        title: 'Ersti-Wochenende Psychologie Heidelberg',
+        start: '20261024T160000Z',
+        end: '20261026T140000Z',
+        location: 'Odenwald Hütte',
+        description: 'Traditionelles Ersti-Wochenende der Fachschaft Psychologie Heidelberg.'
+      }
     },
     {
       id: 'psychoparty',
@@ -34,6 +43,13 @@ export const LifeAtInstitute: React.FC = () => {
       desc: 'Die größte Fachschaftsparty der Heidelberger Geistes- und Verhaltenswissenschaften. DJs, Welcome-Drinks und unvergessliche Nächte.',
       badge: 'Kult-Event',
       icon: Confetti,
+      icsData: {
+        title: 'Psychoparty Heidelberg Winter-Edition',
+        start: '20261114T210000Z',
+        end: '20261115T040000Z',
+        location: 'Halle02 Heidelberg',
+        description: 'Offizielle Fachschaftsparty Psychologie Heidelberg.'
+      }
     },
     {
       id: 'psychokino',
@@ -44,6 +60,13 @@ export const LifeAtInstitute: React.FC = () => {
       desc: 'Filmabend auf Großleinwand mit Popcorn. Im Anschluss: Impulsvortrag & offene Diskussion über Schizophrenie und Diagnostik.',
       badge: 'Freier Eintritt',
       icon: FilmSlate,
+      icsData: {
+        title: 'PsychoKino: A Beautiful Mind',
+        start: '20261203T183000Z',
+        end: '20261203T213000Z',
+        location: 'Psychologisches Institut, Großer Hörsaal',
+        description: 'Filmabend & Diskussion der Fachschaft Psychologie.'
+      }
     },
     {
       id: 'pumpkinparty',
@@ -54,6 +77,13 @@ export const LifeAtInstitute: React.FC = () => {
       desc: 'Gemütlicher Winterumtrunk mit heißem Punsch, Kürbissuppe und Waffeln direkt nach den Nachmittagsvorlesungen.',
       badge: 'Campus Life',
       icon: Flame,
+      icsData: {
+        title: 'Pumpkinparty & Glühweinumtrunk',
+        start: '20261210T160000Z',
+        end: '20261210T200000Z',
+        location: 'Innenhof Hauptstraße 47, Heidelberg',
+        description: 'Winterumtrunk im Hof des Psychologischen Instituts.'
+      }
     },
     {
       id: 'wechslertreffen',
@@ -64,8 +94,39 @@ export const LifeAtInstitute: React.FC = () => {
       desc: 'Du wechselst die Uni oder startest deinen Master in Heidelberg? Wir vernetzen dich mit Alt- und Neu-Heidelbergern!',
       badge: 'Networking',
       icon: Compass,
+      icsData: {
+        title: 'Wechslertreffen Psychologie Heidelberg',
+        start: '20261015T160000Z',
+        end: '20261015T180000Z',
+        location: 'Fachschaftsraum A001, Hauptstr. 47',
+        description: 'Kennenlerntreffen für Master-Erstis und Hochschulwechsler:innen.'
+      }
     },
   ];
+
+  const handleDownloadIcs = (evt: typeof events[0]) => {
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Fachschaft Psychologie Heidelberg//Events//DE
+BEGIN:VEVENT
+SUMMARY:${evt.icsData.title}
+DESCRIPTION:${evt.icsData.description}
+LOCATION:${evt.icsData.location}
+DTSTART:${evt.icsData.start}
+DTEND:${evt.icsData.end}
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${evt.id}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const filteredEvents = filter === 'all' 
     ? events 
@@ -104,11 +165,38 @@ export const LifeAtInstitute: React.FC = () => {
           
           {/* Main Visual: Double-Bezel Courtyard Photography (7 cols) */}
           <div className="lg:col-span-7 flex flex-col justify-between">
-            <div className="p-2.5 rounded-3xl bg-stone-200/80 border border-stone-300 shadow-md h-full">
-              <div className="relative rounded-2xl overflow-hidden h-full min-h-[380px] sm:min-h-[460px] bg-stone-900 group">
+            <div className="p-2 sm:p-2.5 rounded-3xl bg-stone-200/80 border border-stone-300 shadow-md h-full flex flex-col">
+              
+              {/* Photo Switcher Pills */}
+              <div className="flex items-center gap-2 p-1.5 mb-2 bg-stone-100 rounded-2xl border border-stone-200/80">
+                <button
+                  onClick={() => setActivePhoto('courtyard')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    activePhoto === 'courtyard'
+                      ? 'bg-white text-[#85151D] shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900'
+                  }`}
+                >
+                  🌾 Sommerfest im Innenhof
+                </button>
+                <button
+                  onClick={() => setActivePhoto('facade')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    activePhoto === 'facade'
+                      ? 'bg-white text-[#85151D] shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900'
+                  }`}
+                >
+                  🏛️ Institutsportal Hauptstraße 47
+                </button>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden flex-1 min-h-[380px] sm:min-h-[460px] bg-stone-900 group">
                 <img 
-                  src="./images/events-community.jpg" 
-                  alt="Studierende beim stimmungsvollen Sommerfest im Innenhof des Psychologischen Instituts mit Lichterketten"
+                  src={activePhoto === 'courtyard' ? './images/events-community.jpg' : './images/institute-facade.jpg'} 
+                  alt={activePhoto === 'courtyard' 
+                    ? "Studierende beim stimmungsvollen Sommerfest im Innenhof des Psychologischen Instituts mit Lichterketten"
+                    : "Historische Sandsteinfassade des Psychologischen Instituts an der Hauptstraße Heidelberg"}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 
@@ -118,19 +206,21 @@ export const LifeAtInstitute: React.FC = () => {
                 {/* Badge top left */}
                 <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-stone-950/70 backdrop-blur-md border border-white/20 text-white text-xs font-semibold flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>Institutsinnenhof · Hauptstr. 47</span>
+                  <span>{activePhoto === 'courtyard' ? 'Institutsinnenhof · Hauptstr. 47' : 'Hauptstraße 47–51 · Altstadt'}</span>
                 </div>
 
                 {/* Bottom Card Content */}
                 <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
                   <span className="text-xs font-mono uppercase text-amber-300 tracking-wider font-semibold">
-                    Traditionelles Sommer- & Institutsgrillen
+                    {activePhoto === 'courtyard' ? 'Traditionelles Sommer- & Institutsgrillen' : 'Sandstein & Wissenschaft seit 1886'}
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                    Gemeinsam feiern, forschen & vernetzen
+                    {activePhoto === 'courtyard' ? 'Gemeinsam feiern, forschen & vernetzen' : 'Zwischen Universitätsplatz und Marstall'}
                   </h3>
                   <p className="text-xs sm:text-sm text-stone-300 max-w-[50ch] leading-relaxed">
-                    Jedes Semester kommen Studierende aller Jahrgänge, Alumni und Professor:innen im malerischen Hof zusammen. Kühle Getränke, Musik und offener Austausch.
+                    {activePhoto === 'courtyard' 
+                      ? 'Jedes Semester kommen Studierende aller Jahrgänge, Alumni und Professor:innen im malerischen Hof zusammen. Kühle Getränke, Musik und offener Austausch.'
+                      : 'Das Psychologische Institut verbindet historische Heidelberger Altstadt-Architektur mit modernsten kognitiven und klinischen Versuchslaboren.'}
                   </p>
                 </div>
               </div>
@@ -199,6 +289,16 @@ export const LifeAtInstitute: React.FC = () => {
                           </span>
                         </div>
                       </div>
+
+                      {/* ICS Export Button */}
+                      <button
+                        onClick={() => handleDownloadIcs(evt)}
+                        className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                        title="In Kalender eintragen (.ics)"
+                      >
+                        <CalendarPlus size={15} className="text-[#85151D]" />
+                        <span className="hidden sm:inline">.ics</span>
+                      </button>
                     </div>
 
                     <p className="text-xs text-stone-600 mt-2 leading-relaxed">

@@ -7,11 +7,70 @@ import {
   FileArrowDown, 
   CalendarCheck,
   WarningCircle,
-  CaretRight
+  Clock,
+  Compass,
+  ArrowRight,
+  Sparkle
 } from '@phosphor-icons/react';
 
 export const StudyPathways: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'bsc' | 'klip' | 'msc' | 'approbation'>('bsc');
+  const [selectedSemester, setSelectedSemester] = useState<number>(1);
+
+  const semesterGuide = [
+    {
+      sem: 1,
+      title: '1. – 2. Semester: Orientierung & Grundlagen',
+      badge: 'B.Sc. Einstieg',
+      focus: 'EKS-Woche, Stundenplanbau mit heiCO, Allgemeine & Biologische Psychologie, Statistik I & II.',
+      checklist: [
+        'An der EKS teilnehmen und Mentor:in kennenlernen',
+        'Stundenplan in heiCO zusammenstellen & Belegfristen beachten',
+        'Erste VP-Stunden (von 30 geforderten) im SONA-System ableisten',
+        'Altklausuren zur Orientierung im Fachschaftsarchiv ansehen'
+      ],
+      tip: 'Keine Panik vor Statistik I! Die Fachschaft organisiert jedes Semester begleitende Lerngruppen und Altklausuren-Tutorien.'
+    },
+    {
+      sem: 2,
+      title: '3. – 4. Semester: Empirie & Orientierungspraktikum',
+      badge: 'B.Sc. Vertiefung',
+      focus: 'Empiriepraktikum (Expra), Testtheorie, Diagnostik, 4 Wochen Orientierungspraktikum (OP).',
+      checklist: [
+        'Expra-Thema wählen & eigene empirische Studie planen',
+        'Orientierungspraktikum (mind. 150/240h) in klinischer oder psychosozialer Einrichtung absolvieren',
+        'Laufzettel für das OP im Prüfungsamt einreichen',
+        'Prüfen, ob ein Auslandssemester (Erasmus+) im 5. Semester geplant ist'
+      ],
+      tip: 'Das Orientierungspraktikum sollte frühzeitig in den vorlesungsfreien Zeiten geplant werden. Nutze unsere Fachschafts-Praktikumsliste!'
+    },
+    {
+      sem: 3,
+      title: '5. – 6. Semester: BQT I, Bachelorarbeit & Masterwahl',
+      badge: 'B.Sc. Abschluss',
+      focus: 'Berufsqualifizierende Tätigkeit I (BQT I), Bachelorarbeit (12 ECTS), Master-Bewerbung (KliP vs. Forschung).',
+      checklist: [
+        'BQT I (mind. 240h) unter fachpsychologischer Anleitung absolvieren',
+        'Betreuer:in für die Bachelorarbeit an einem der Lehrstühle anfragen',
+        'Polyvalenz-Bescheinigung für die Master-Bewerbung ausstellen lassen',
+        'Bewerbungsfristen für M.Sc. KliP (bundesweit meist 15. Juli) beachten'
+      ],
+      tip: 'Die Polyvalenz-Bestätigung belegt die Approbationskonformität deines Heidelberger B.Sc. für bundesweite Master-Bewerbungen.'
+    },
+    {
+      sem: 4,
+      title: 'Master KliP: Klinische Praxis (BQT II & III)',
+      badge: 'M.Sc. KliP',
+      focus: 'Stationäre Praxisphasen (BQT II), ambulante Behandlungsanteile in der Hochschulambulanz (BQT III).',
+      checklist: [
+        'Stationäre Praxisphase im Universitätsklinikum oder Partnerkliniken',
+        'Ambulante Behandlungsanteile unter Supervision in der Hochschulambulanz',
+        'Masterarbeit in klinischer Psychologie/Psychotherapie',
+        'Anmeldung zur staatlichen psychotherapeutischen Prüfung (Staatsexamen)'
+      ],
+      tip: 'Nach erfolgreichem Staatsexamen erhältst du die Approbation und kannst die 5-jährige Fachweiterbildung in Anstellung beginnen.'
+    }
+  ];
 
   return (
     <section id="studium" className="py-20 bg-[#FAF8F5] border-b border-stone-200 relative overflow-hidden">
@@ -90,8 +149,8 @@ export const StudyPathways: React.FC = () => {
           </button>
         </div>
 
-        {/* Tab Content Panels (Double-Bezel Card Layout) */}
-        <div className="bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-10">
+        {/* Tab Content Panels */}
+        <div className="bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-10 mb-12">
           
           {/* TAB 1: BACHELOR */}
           {activeTab === 'bsc' && (
@@ -117,7 +176,6 @@ export const StudyPathways: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Box 1: EKS */}
                 <div className="p-6 rounded-2xl bg-amber-50/50 border border-amber-200/70">
                   <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-sm mb-3">
                     01
@@ -134,7 +192,6 @@ export const StudyPathways: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Box 2: Modulaufbau */}
                 <div className="p-6 rounded-2xl bg-stone-50 border border-stone-200">
                   <div className="w-8 h-8 rounded-lg bg-stone-200 text-stone-800 flex items-center justify-center font-bold text-sm mb-3">
                     02
@@ -152,7 +209,6 @@ export const StudyPathways: React.FC = () => {
                   </ul>
                 </div>
 
-                {/* Box 3: Praktika & Bachelorarbeit */}
                 <div className="p-6 rounded-2xl bg-stone-50 border border-stone-200">
                   <div className="w-8 h-8 rounded-lg bg-stone-200 text-stone-800 flex items-center justify-center font-bold text-sm mb-3">
                     03
@@ -267,9 +323,7 @@ export const StudyPathways: React.FC = () => {
                 </div>
               </div>
 
-              {/* 4-Step Visual Timeline */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
                 <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200 relative">
                   <span className="text-xs font-mono font-bold text-[#85151D] uppercase">Stufe 1</span>
                   <h5 className="text-base font-bold text-stone-900 mt-1 mb-2">Polyvalenter B.Sc.</h5>
@@ -305,10 +359,8 @@ export const StudyPathways: React.FC = () => {
                   </p>
                   <div className="mt-4 text-[11px] font-medium text-emerald-700 font-semibold">Vergütet nach Tarif</div>
                 </div>
-
               </div>
 
-              {/* Notice Box */}
               <div className="p-4 rounded-xl bg-amber-50 border border-amber-200/80 flex items-start gap-3">
                 <WarningCircle size={20} className="text-amber-700 shrink-0 mt-0.5" weight="fill" />
                 <div className="text-xs text-amber-900 leading-relaxed">
@@ -318,6 +370,87 @@ export const StudyPathways: React.FC = () => {
             </div>
           )}
 
+        </div>
+
+        {/* NEW FEATURE: INTERACTIVE SEMESTER-PLANNER & CHECKLIST */}
+        <div className="p-2 sm:p-2.5 rounded-3xl bg-stone-200/80 border border-stone-300 shadow-sm">
+          <div className="p-6 sm:p-8 rounded-2xl bg-white border border-stone-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-100">
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-xl bg-[#85151D] text-white flex items-center justify-center font-bold">
+                  <Compass size={22} weight="bold" />
+                </span>
+                <div>
+                  <h3 className="text-lg font-bold text-[#121316]">
+                    Interaktiver Semester-Planer: Wo stehst du gerade?
+                  </h3>
+                  <p className="text-xs text-stone-500">
+                    Klicke auf deinen aktuellen Studienabschnitt für maßgeschneiderte Tipps & Fristen
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Semester Selection Pills */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-6 pb-6">
+              {semesterGuide.map((g, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedSemester(idx)}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                    selectedSemester === idx
+                      ? 'bg-red-50/80 border-[#85151D] text-[#85151D] shadow-xs'
+                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                  }`}
+                >
+                  <div className="text-[10px] font-mono uppercase font-bold text-stone-500">
+                    {g.badge}
+                  </div>
+                  <div className="text-xs font-bold mt-1 text-[#121316]">
+                    {idx === 0 ? '1.–2. Semester' : idx === 1 ? '3.–4. Semester' : idx === 2 ? '5.–6. Semester' : 'Master KliP'}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Detailed Selected Semester Guide Card */}
+            <div className="p-6 rounded-2xl bg-[#FAF8F5] border border-stone-200 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-200">
+                <h4 className="text-base font-bold text-stone-900">
+                  {semesterGuide[selectedSemester].title}
+                </h4>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-white border border-stone-200 text-[#85151D] font-bold">
+                  {semesterGuide[selectedSemester].badge}
+                </span>
+              </div>
+
+              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed">
+                <strong>Schwerpunkte:</strong> {semesterGuide[selectedSemester].focus}
+              </p>
+
+              <div>
+                <div className="text-xs font-bold text-stone-800 uppercase font-mono tracking-wider mb-2">
+                  Deine Meilensteine in dieser Phase:
+                </div>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-stone-600">
+                  {semesterGuide[selectedSemester].checklist.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-stone-200/70">
+                      <CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5" weight="fill" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2.5">
+                <Sparkle size={18} className="text-amber-700 shrink-0 mt-0.5" weight="fill" />
+                <div>
+                  <strong>Fachschafts-Tipp:</strong> {semesterGuide[selectedSemester].tip}
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>

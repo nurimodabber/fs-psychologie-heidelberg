@@ -7,17 +7,59 @@ import {
   PaperPlaneRight, 
   CheckCircle,
   Building,
-  ChatDots
+  ChatDots,
+  NavigationArrow,
+  Wheelchair
 } from '@phosphor-icons/react';
 
 export const ContactSection: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [activePoi, setActivePoi] = useState<number>(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     topic: 'bachelor',
     message: ''
   });
+
+  const pois = [
+    {
+      id: 'institut',
+      title: 'Psychologisches Institut (Raum A001)',
+      distance: 'Vor Ort',
+      time: '0 Min.',
+      location: 'Hauptstraße 47–51, Hinterhaus EG',
+      tip: 'Hier tagt die Fachschaft dienstags um 18:00 Uhr s.t. Offene Tür, Kaffeemaschine & Sofa für alle Psychologie-Studierenden.',
+      access: 'Barrierefrei erreichbar über die Rampe im Innenhof.'
+    },
+    {
+      id: 'unplatz',
+      title: 'Universitätsplatz & Neue Uni',
+      distance: '180 Meter',
+      time: '2 Min. Fußweg',
+      location: 'Grabengasse / Universitätsplatz',
+      tip: 'Zentraler Campus-Treffpunkt der Altstadt. Hier halten die Buslinien 31, 32 & 33. Große Vorlesungssäle und Triplex-Mensa.',
+      access: 'Zentrale Bushaltestelle Universitätsplatz.'
+    },
+    {
+      id: 'marstall',
+      title: 'Marstall Mensa & Zeughaus',
+      distance: '260 Meter',
+      time: '3 Min. Fußweg',
+      location: 'Marstallhof 1',
+      tip: 'Die beliebteste Mensa Heidelbergs mit schönem Innenhof-Biergarten, Café Marstall und Abendbetrieb bis 23:30 Uhr.',
+      access: 'Studi-Karten-Aufladung & Verpflegung.'
+    },
+    {
+      id: 'ub',
+      title: 'Universitätsbibliothek (UB Altstadt)',
+      distance: '340 Meter',
+      time: '4 Min. Fußweg',
+      location: 'Plöck 107–109',
+      tip: 'Riesiger psychologischer Fachbuchbestand, Gruppenarbeitsräume, Scanstellen und Ruhearbeitsplätze bis spät in die Nacht.',
+      access: 'Ausleihe mit Heidelberger Uni-ID.'
+    }
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +95,7 @@ export const ContactSection: React.FC = () => {
         </div>
 
         {/* 2-Column Split: Info Cards vs. Contact Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
           
           {/* Left Column: Location & Hours (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
@@ -171,7 +213,7 @@ export const ContactSection: React.FC = () => {
                       setFormSubmitted(false);
                       setFormData({ name: '', email: '', topic: 'bachelor', message: '' });
                     }}
-                    className="mt-4 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition-colors"
+                    className="mt-4 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition-colors cursor-pointer"
                   >
                     Weitere Nachricht verfassen
                   </button>
@@ -245,7 +287,7 @@ export const ContactSection: React.FC = () => {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#85151D] text-white text-xs font-bold hover:bg-[#660E15] transition-all duration-200 shadow-sm cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#85151D] text-white text-xs font-bold hover:bg-[#660E15] transition-all duration-200 shadow-sm cursor-pointer active:scale-[0.98]"
                     >
                       <span>Nachricht absenden</span>
                       <PaperPlaneRight size={16} weight="bold" />
@@ -256,6 +298,71 @@ export const ContactSection: React.FC = () => {
             </div>
           </div>
 
+        </div>
+
+        {/* INTERACTIVE ALTSTADT CAMPUS NAVIGATOR */}
+        <div className="p-2 sm:p-2.5 rounded-3xl bg-stone-200/80 border border-stone-300 shadow-sm">
+          <div className="p-6 sm:p-8 rounded-2xl bg-white border border-stone-200 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
+              <div className="flex items-center gap-3">
+                <span className="w-9 h-9 rounded-xl bg-stone-100 text-[#85151D] flex items-center justify-center">
+                  <NavigationArrow size={20} weight="bold" />
+                </span>
+                <div>
+                  <h3 className="text-base font-bold text-[#121316]">
+                    Altstadt-Campus Wegweiser: Rund um Hauptstraße 47
+                  </h3>
+                  <p className="text-xs text-stone-500">
+                    Entfernungen & studentische Orientierungspunkte zu Fuß
+                  </p>
+                </div>
+              </div>
+              <span className="text-xs font-mono text-stone-400">49.4124° N, 8.7053° E</span>
+            </div>
+
+            {/* POI Selector Buttons */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {pois.map((poi, idx) => (
+                <button
+                  key={poi.id}
+                  onClick={() => setActivePoi(idx)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                    activePoi === idx
+                      ? 'bg-red-50/80 border-[#85151D] text-[#85151D] shadow-xs'
+                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] font-mono text-stone-500">
+                    <span>{poi.distance}</span>
+                    <span>{poi.time}</span>
+                  </div>
+                  <div className="text-xs font-bold mt-1 text-[#121316] line-clamp-1">
+                    {poi.title}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Detailed Selected POI Card */}
+            <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-stone-200 space-y-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h4 className="text-sm font-bold text-stone-900">
+                  {pois[activePoi].title}
+                </h4>
+                <span className="text-xs font-mono text-[#85151D] font-bold">
+                  {pois[activePoi].location}
+                </span>
+              </div>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                {pois[activePoi].tip}
+              </p>
+              <div className="pt-2 flex items-center gap-2 text-[11px] text-stone-500 font-medium">
+                <Wheelchair size={15} className="text-stone-700" />
+                <span>{pois[activePoi].access}</span>
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>

@@ -9,15 +9,16 @@ import {
   Buildings, 
   FileText,
   EnvelopeSimple,
-  Sparkle
+  MagnifyingGlass
 } from '@phosphor-icons/react';
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
   activeSection: string;
+  onOpenSearch?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpenSearch }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -67,10 +68,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
       {/* Main Island Header */}
       <header className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled 
-          ? 'bg-[#FCFBF9]/90 backdrop-blur-md border-b border-stone-200/80 shadow-xs py-3' 
-          : 'bg-[#FCFBF9] py-4 border-b border-stone-200/50'
+          ? 'bg-[#FCFBF9]/95 backdrop-blur-md border-b border-stone-200/90 shadow-xs py-3' 
+          : 'bg-[#FCFBF9] py-4 border-b border-stone-200/60'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          
           {/* Logo & Institute Identity */}
           <button 
             onClick={() => onNavigate('top')}
@@ -95,17 +97,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden xl:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'text-[#85151D] bg-red-50/80 font-semibold'
-                      : 'text-stone-700 hover:text-[#85151D] hover:bg-stone-100/60'
+                      ? 'text-[#85151D] bg-red-50/90 font-semibold'
+                      : 'text-stone-700 hover:text-[#85151D] hover:bg-stone-100/70'
                   }`}
                 >
                   {item.label}
@@ -114,11 +116,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
             })}
           </nav>
 
-          {/* Action Button & Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          {/* Actions: Search & CTA */}
+          <div className="flex items-center gap-2.5">
+            {/* Quick Search Button */}
+            {onOpenSearch && (
+              <button
+                onClick={onOpenSearch}
+                className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/90 text-xs font-medium text-stone-700 transition-colors cursor-pointer"
+                title="Schnellsuche öffnen (⌘K)"
+              >
+                <MagnifyingGlass size={15} className="text-[#85151D]" weight="bold" />
+                <span>Suche</span>
+                <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-white border border-stone-200 text-stone-500">
+                  ⌘K
+                </span>
+              </button>
+            )}
+
             <button
               onClick={() => onNavigate('studium')}
-              className="hidden sm:inline-flex items-center gap-2 pl-4 pr-2 py-1.5 rounded-full bg-[#85151D] text-white text-xs font-semibold hover:bg-[#660E15] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer group"
+              className="hidden sm:inline-flex items-center gap-2 pl-4 pr-2 py-1.5 rounded-full bg-[#85151D] text-white text-xs font-semibold hover:bg-[#660E15] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer group active:scale-[0.98]"
             >
               <span>Ersti-Guide</span>
               <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
@@ -126,10 +143,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
               </span>
             </button>
 
+            {/* Mobile Search Icon */}
+            {onOpenSearch && (
+              <button
+                onClick={onOpenSearch}
+                className="sm:hidden p-2 rounded-lg text-stone-700 hover:text-[#85151D] hover:bg-stone-100 cursor-pointer"
+                aria-label="Suche öffnen"
+              >
+                <MagnifyingGlass size={20} weight="bold" />
+              </button>
+            )}
+
             {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-stone-700 hover:text-[#85151D] hover:bg-stone-100 focus:outline-hidden cursor-pointer"
+              className="xl:hidden p-2 rounded-lg text-stone-700 hover:text-[#85151D] hover:bg-stone-100 focus:outline-hidden cursor-pointer"
               aria-label="Navigation umschalten"
             >
               {mobileMenuOpen ? <X size={24} weight="bold" /> : <List size={24} weight="bold" />}
@@ -139,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
 
         {/* Mobile Flyout Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-stone-200 bg-[#FCFBF9] px-4 pt-3 pb-6 shadow-lg animate-fadeIn">
+          <div className="xl:hidden border-t border-stone-200 bg-[#FCFBF9] px-4 pt-3 pb-6 shadow-xl animate-fadeIn">
             <div className="space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -162,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection }) => 
                   </button>
                 );
               })}
-              <div className="pt-3">
+              <div className="pt-3 flex flex-col gap-2">
                 <button
                   onClick={() => {
                     onNavigate('kontakt');

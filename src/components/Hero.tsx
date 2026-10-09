@@ -91,7 +91,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreStudy, onExploreLife }) => 
               {/* Inner Core */}
               <div className="relative rounded-2xl overflow-hidden aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 bg-stone-900 group">
                 <img
-                  src="/images/hero-campus.jpg"
+                  src="./images/hero-campus.jpg"
                   alt="Studierende im historischen Sandsteinhof des Psychologischen Instituts Heidelberg"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="eager"

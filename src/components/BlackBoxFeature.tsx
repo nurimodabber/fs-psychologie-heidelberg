@@ -53,7 +53,7 @@ export const BlackBoxFeature: React.FC = () => {
                 <div className="p-2 rounded-2xl bg-stone-200/80 border border-stone-300 shadow-md">
                   <div className="rounded-xl overflow-hidden aspect-3/4 bg-stone-900 group">
                     <img 
-                      src="/images/blackbox-mag.jpg" 
+                      src="./images/blackbox-mag.jpg" 
                       alt="BlackBox Ausgabe mit Necker-Würfel auf der Titelseite im Lesezimmer"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />

@@ -107,7 +107,7 @@ export const LifeAtInstitute: React.FC = () => {
             <div className="p-2.5 rounded-3xl bg-stone-200/80 border border-stone-300 shadow-md h-full">
               <div className="relative rounded-2xl overflow-hidden h-full min-h-[380px] sm:min-h-[460px] bg-stone-900 group">
                 <img 
-                  src="/images/events-community.jpg" 
+                  src="./images/events-community.jpg" 
                   alt="Studierende beim stimmungsvollen Sommerfest im Innenhof des Psychologischen Instituts mit Lichterketten"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
